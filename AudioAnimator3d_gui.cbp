@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="AudioAnimator3d_gui" />
+		<Option pch_mode="0" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Win32_Release_shared">
+				<Option platforms="Windows;" />
+				<Option output="bin/win32/AudioAnimator3d_gui_shared" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/win32" />
+				<Option object_output="obj/Win32_gcc_Release_shared" />
+				<Option external_deps="resources.o;" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-Wall" />
+					<Add option="-fpermissive" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-D__GNUWIN32__" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="opengl32" />
+					<Add library="winmm" />
+					<Add library="m" />
+					<Add library="glu32" />
+					<Add library="freetype250" />
+					<Add library="fftw3" />
+					<Add library="bin\win32\Irrlicht.dll" />
+				</Linker>
+				<ExtraCommands>
+					<Add before="windres src/resources.rc -O coff -o obj/Win32_gcc_Release_shared/resources.o" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Win32_Debug_shared">
+				<Option platforms="Windows;" />
+				<Option output="bin/win32/AudioAnimator3d_gui_shared_debug" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/win32" />
+				<Option object_output="obj/Win32_gcc_Debug_shared" />
+				<Option external_deps="resources.o;" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-Wall" />
+					<Add option="-fpermissive" />
+					<Add option="-DWIN32" />
+					<Add option="-DDEBUG" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-D__GNUWIN32__" />
+				</Compiler>
+				<Linker>
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="opengl32" />
+					<Add library="winmm" />
+					<Add library="m" />
+					<Add library="glu32" />
+					<Add library="freetype250" />
+					<Add library="fftw3" />
+					<Add library="bin\win32\Irrlicht.dll" />
+					<Add library="obj\Win32_gcc_Debug_shared\resources.o" />
+				</Linker>
+				<ExtraCommands>
+					<Add before="windres src/resources.rc -O coff -o obj/Win32_gcc_Debug_shared/resources.o" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Win32_Release_static">
+				<Option platforms="Windows;" />
+				<Option output="bin/win32/AudioAnimator3d_gui_static" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/win32" />
+				<Option object_output="obj/Win32_gcc_Release_static" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-fpermissive" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-D_IRR_STATIC_LIB_" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add option="-D__GNUWIN32__" />
+					<Add option="-DSFML_STATIC" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-static" />
+					<Add option="-static-libgcc" />
+					<Add library="Irrlicht" />
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="opengl32" />
+					<Add library="glu32" />
+					<Add library="winmm" />
+					<Add library="m" />
+					<Add library="freetype250" />
+					<Add library="fftw3" />
+					<Add directory="../irrlicht-gl/lib/Win32-gcc" />
+				</Linker>
+				<ExtraCommands>
+					<Add before="windres src/resources.rc -O coff -o obj/Win32_gcc_Release_shared/resources.o" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Win32_Release_static_C2Duo">
+				<Option platforms="Windows;" />
+				<Option output="bin/win32/AudioAnimator3d_gui_static_c2d" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/win32" />
+				<Option object_output="obj/Win32_gcc_Release_static_C2Duo" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-march=core2" />
+					<Add option="-fomit-frame-pointer" />
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-O3" />
+					<Add option="-fpermissive" />
+					<Add option="-DWIN32" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_WINDOWS" />
+					<Add option="-D_IRR_STATIC_LIB_" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add option="-D__GNUWIN32__" />
+					<Add option="-DSFML_STATIC" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-static" />
+					<Add option="-static-libgcc" />
+					<Add library="kernel32" />
+					<Add library="user32" />
+					<Add library="gdi32" />
+					<Add library="winspool" />
+					<Add library="comdlg32" />
+					<Add library="advapi32" />
+					<Add library="shell32" />
+					<Add library="ole32" />
+					<Add library="oleaut32" />
+					<Add library="uuid" />
+					<Add library="opengl32" />
+					<Add library="glu32" />
+					<Add library="winmm" />
+					<Add library="m" />
+					<Add library="freetype250" />
+					<Add library="fftw3" />
+					<Add library="Irrlicht" />
+					<Add directory="../irrlicht-gl/lib/Win32-gcc" />
+				</Linker>
+				<ExtraCommands>
+					<Add before="windres src/resources.rc -O coff -o obj/resources.o" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Linux_Debug">
+				<Option platforms="Unix;" />
+				<Option output="../../bin/Linux/CGUIPlot" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../../bin/Linux/" />
+				<Option object_output=".objs/Linux_Debug" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-fpermissive" />
+					<Add option="-D_DEBUG" />
+					<Add option="-DDEBUG" />
+					<Add directory="/usr/include/freetype2" />
+					<Add directory="projects/FFTAudioPlayer" />
+					<Add directory="include/hampe/ext" />
+					<Add directory="include/hampe/ext/audio" />
+					<Add directory="projects/AudioAnimator" />
+					<Add directory="src" />
+					<Add directory="include/hampe/scene/geometry" />
+					<Add directory="include/hampe/audio" />
+					<Add directory="include/hampe/core" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add library="Xxf86vm" />
+					<Add library="Xcursor" />
+					<Add library="GL" />
+					<Add library="fftw3" />
+					<Add library="freetype" />
+					<Add library="..\..\SDK\irr-svn-4562\lib\Linux\libIrrlicht.so" />
+					<Add library="\usr\lib\libsfml-audio.so" />
+					<Add library="\usr\lib\libsfml-graphics.so" />
+					<Add library="\usr\lib\libsfml-network.so" />
+					<Add library="\usr\lib\libsfml-system.so" />
+					<Add library="\usr\lib\libsfml-window.so" />
+					<Add directory="/usr/lib/x86_64-linux-gnu" />
+					<Add directory="../../SDK/irr-svn-4562/lib/Linux" />
+				</Linker>
+			</Target>
+			<Target title="Linux_Release">
+				<Option platforms="Unix;" />
+				<Option output="../../bin/Linux/CGUIPlot" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../../bin/Linux/" />
+				<Option object_output=".objs/Linux_Release" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-std=c++0x" />
+					<Add option="-fpermissive" />
+					<Add option="-DNDEBUG" />
+					<Add directory="/usr/include/freetype2" />
+					<Add directory="projects/FFTAudioPlayer" />
+					<Add directory="include/hampe/ext" />
+					<Add directory="include/hampe/ext/audio" />
+					<Add directory="projects/AudioAnimator" />
+					<Add directory="src" />
+					<Add directory="include/hampe/scene/geometry" />
+					<Add directory="include/hampe/audio" />
+					<Add directory="include/hampe/core" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="Xxf86vm" />
+					<Add library="Xcursor" />
+					<Add library="GL" />
+					<Add library="freetype" />
+					<Add library="\usr\lib\x86_64-linux-gnu\libfftw3.so" />
+					<Add library="\usr\lib\libsfml-audio.so" />
+					<Add library="\usr\lib\libsfml-graphics.so" />
+					<Add library="\usr\lib\libsfml-network.so" />
+					<Add library="\usr\lib\libsfml-system.so" />
+					<Add library="\usr\lib\libsfml-window.so" />
+					<Add library="..\..\SDK\irr-svn-4562\lib\Linux\libIrrlicht.so" />
+					<Add directory="/usr/lib/x86_64-linux-gnu" />
+					<Add directory="../../SDK/irr-svn-4562/lib/Linux" />
+				</Linker>
+			</Target>
+			<Target title="Linux_Debug_static">
+				<Option platforms="Unix;" />
+				<Option output="../../bin/Linux/CGUIPlot" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../../bin/Linux/" />
+				<Option object_output=".objs/Linux_Debug_static" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-fpermissive" />
+					<Add option="-D_IRR_STATIC_LIB_" />
+					<Add option="-D_DEBUG" />
+					<Add option="-DDEBUG" />
+					<Add option="-DSFML_STATIC" />
+					<Add directory="/usr/include/freetype2" />
+					<Add directory="projects/FFTAudioPlayer" />
+					<Add directory="include/hampe/ext" />
+					<Add directory="include/hampe/ext/audio" />
+					<Add directory="projects/AudioAnimator" />
+					<Add directory="src" />
+					<Add directory="include/hampe/scene/geometry" />
+					<Add directory="include/hampe/audio" />
+					<Add directory="include/hampe/core" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add library="Irrlichtd" />
+					<Add library="Xxf86vm" />
+					<Add library="Xcursor" />
+					<Add library="Xext" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="freetype" />
+					<Add library="fftw3" />
+					<Add library="\usr\lib\libsfml-audio.so" />
+					<Add library="\usr\lib\libsfml-graphics.so" />
+					<Add library="\usr\lib\libsfml-network.so" />
+					<Add library="\usr\lib\libsfml-system.so" />
+					<Add library="\usr\lib\libsfml-window.so" />
+					<Add directory="/usr/lib/x86_64-linux-gnu" />
+					<Add directory="../../SDK/irr-svn-4562/lib/Linux" />
+				</Linker>
+			</Target>
+			<Target title="Linux_Release_static">
+				<Option platforms="Unix;" />
+				<Option output="../../bin/Linux/CGUIPlot" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="../../bin/Linux/" />
+				<Option object_output=".objs/Linux_Release_static" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Option projectResourceIncludeDirsRelation="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-fpermissive" />
+					<Add option="-D_IRR_STATIC_LIB_" />
+					<Add option="-DNDEBUG" />
+					<Add option="-DSFML_STATIC" />
+					<Add directory="/usr/include/freetype2" />
+					<Add directory="projects/FFTAudioPlayer" />
+					<Add directory="include/hampe/ext" />
+					<Add directory="include/hampe/ext/audio" />
+					<Add directory="projects/AudioAnimator" />
+					<Add directory="src" />
+					<Add directory="include/hampe/scene/geometry" />
+					<Add directory="include/hampe/audio" />
+					<Add directory="include/hampe/core" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="Irrlicht" />
+					<Add library="Xxf86vm" />
+					<Add library="Xcursor" />
+					<Add library="Xext" />
+					<Add library="X11" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="fftw3" />
+					<Add library="freetype" />
+					<Add library="\usr\lib\libsfml-audio.so" />
+					<Add library="\usr\lib\libsfml-graphics.so" />
+					<Add library="\usr\lib\libsfml-network.so" />
+					<Add library="\usr\lib\libsfml-system.so" />
+					<Add library="\usr\lib\libsfml-window.so" />
+					<Add directory="/usr/lib/x86_64-linux-gnu" />
+					<Add directory="../../SDK/irr-svn-4562/lib/Linux" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="Linux_Release;Win32_Release_static;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-std=c++11" />
+			<Add option="-g" />
+			<Add directory="../irrlicht-gl/include" />
+			<Add directory="../libHampe/include" />
+		</Compiler>
+		<Linker>
+			<Add library="bin\win32\sfml-audio-2.dll" />
+			<Add library="bin\win32\sfml-system-2.dll" />
+		</Linker>
+		<Unit filename="../libHampe/include/audio/CADSREnvelope.cpp" />
+		<Unit filename="../libHampe/include/audio/CADSREnvelope.h" />
+		<Unit filename="../libHampe/include/audio/CCombinedOscillator.cpp" />
+		<Unit filename="../libHampe/include/audio/CCombinedOscillator.h" />
+		<Unit filename="../libHampe/include/audio/CRectangleOscillator.cpp" />
+		<Unit filename="../libHampe/include/audio/CRectangleOscillator.h" />
+		<Unit filename="../libHampe/include/audio/CSawOscillator.cpp" />
+		<Unit filename="../libHampe/include/audio/CSawOscillator.h" />
+		<Unit filename="../libHampe/include/audio/CSineOscillator.cpp" />
+		<Unit filename="../libHampe/include/audio/CSineOscillator.h" />
+		<Unit filename="../libHampe/include/audio/CTriangleOscillator.cpp" />
+		<Unit filename="../libHampe/include/audio/CTriangleOscillator.h" />
+		<Unit filename="../libHampe/include/audio/FourierTransformRtoC.cpp" />
+		<Unit filename="../libHampe/include/audio/FourierTransformRtoC.h" />
+		<Unit filename="../libHampe/include/audio/irrAudio.cpp" />
+		<Unit filename="../libHampe/include/audio/irrAudio.h" />
+		<Unit filename="../libHampe/include/core/CDateTime.cpp" />
+		<Unit filename="../libHampe/include/core/CDateTime.h" />
+		<Unit filename="../libHampe/include/core/CMath.cpp" />
+		<Unit filename="../libHampe/include/core/CMath.h" />
+		<Unit filename="../libHampe/include/core/CMatrix.cpp" />
+		<Unit filename="../libHampe/include/core/CMatrix.h" />
+		<Unit filename="../libHampe/include/core/E_ENUMERATION_STRINGS.h" />
+		<Unit filename="../libHampe/include/core/IFunction.h" />
+		<Unit filename="../libHampe/include/core/IStringable.h" />
+		<Unit filename="../libHampe/include/core/irrUString.h" />
+		<Unit filename="../libHampe/include/core/sinCosTable.h" />
+		<Unit filename="../libHampe/include/core/sprintf.cpp" />
+		<Unit filename="../libHampe/include/core/sprintf.h" />
+		<Unit filename="../libHampe/include/gui/CGUIImageViewer.cpp" />
+		<Unit filename="../libHampe/include/gui/CGUIImageViewer.h" />
+		<Unit filename="../libHampe/include/gui/CGUITTFont.cpp" />
+		<Unit filename="../libHampe/include/gui/CGUITTFont.h" />
+		<Unit filename="../libHampe/include/gui/IGUITTFont.h" />
+		<Unit filename="../libHampe/include/io/CXMLWriterUTF8.cpp" />
+		<Unit filename="../libHampe/include/io/CXMLWriterUTF8.h" />
+		<Unit filename="../libHampe/include/io/FileSystem.cpp" />
+		<Unit filename="../libHampe/include/io/FileSystem.h" />
+		<Unit filename="../libHampe/include/io/readFile.cpp" />
+		<Unit filename="../libHampe/include/io/readFile.h" />
+		<Unit filename="../libHampe/include/io/svgLib.cpp" />
+		<Unit filename="../libHampe/include/io/svgLib.h" />
+		<Unit filename="../libHampe/include/libHampe.h" />
+		<Unit filename="../libHampe/include/scene/CAutoMeshSceneNode.cpp" />
+		<Unit filename="../libHampe/include/scene/CAutoMeshSceneNode.h" />
+		<Unit filename="../libHampe/include/scene/CMatrixSceneNode.cpp" />
+		<Unit filename="../libHampe/include/scene/CMatrixSceneNode.h" />
+		<Unit filename="../libHampe/include/scene/Camera.cpp" />
+		<Unit filename="../libHampe/include/scene/Camera.h" />
+		<Unit filename="../libHampe/include/scene/geometry.cpp" />
+		<Unit filename="../libHampe/include/scene/geometry.h" />
+		<Unit filename="../libHampe/include/video/CLinearColorGradient.cpp" />
+		<Unit filename="../libHampe/include/video/CLinearColorGradient.h" />
+		<Unit filename="../libHampe/include/video/ColorConstants.cpp" />
+		<Unit filename="../libHampe/include/video/ColorConstants.h" />
+		<Unit filename="../libHampe/include/video/IColorGradient.cpp" />
+		<Unit filename="../libHampe/include/video/IColorGradient.h" />
+		<Unit filename="../libHampe/include/video/drawLoadingScreen.cpp" />
+		<Unit filename="../libHampe/include/video/drawLoadingScreen.h" />
+		<Unit filename="../libHampe/include/video/imageAtlas.cpp" />
+		<Unit filename="../libHampe/include/video/imageAtlas.h" />
+		<Unit filename="../libHampe/include/video/imageBlend.cpp" />
+		<Unit filename="../libHampe/include/video/imageBlend.h" />
+		<Unit filename="../libHampe/include/video/imageDrawCircle.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawCircle.h" />
+		<Unit filename="../libHampe/include/video/imageDrawEllipse.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawEllipse.h" />
+		<Unit filename="../libHampe/include/video/imageDrawGrid.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawGrid.h" />
+		<Unit filename="../libHampe/include/video/imageDrawImage.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawImage.h" />
+		<Unit filename="../libHampe/include/video/imageDrawLine.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawLine.h" />
+		<Unit filename="../libHampe/include/video/imageDrawPixel.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawPixel.h" />
+		<Unit filename="../libHampe/include/video/imageDrawPolyLine.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawPolyLine.h" />
+		<Unit filename="../libHampe/include/video/imageDrawRect.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawRect.h" />
+		<Unit filename="../libHampe/include/video/imageDrawRoundRect.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawRoundRect.h" />
+		<Unit filename="../libHampe/include/video/imageDrawText.cpp" />
+		<Unit filename="../libHampe/include/video/imageDrawText.h" />
+		<Unit filename="../libHampe/include/video/imageFilter.cpp" />
+		<Unit filename="../libHampe/include/video/imageFilter.h" />
+		<Unit filename="../libHampe/include/video/imageFloodFill.cpp" />
+		<Unit filename="../libHampe/include/video/imageFloodFill.h" />
+		<Unit filename="../libHampe/include/video/imageRepeat.cpp" />
+		<Unit filename="../libHampe/include/video/imageRepeat.h" />
+		<Unit filename="../libHampe/include/video/imageResize.cpp" />
+		<Unit filename="../libHampe/include/video/imageResize.h" />
+		<Unit filename="../libHampe/include/video/imageScale.cpp" />
+		<Unit filename="../libHampe/include/video/imageScale.h" />
+		<Unit filename="../libHampe/include/video/renderByPrimitiveType.cpp" />
+		<Unit filename="../libHampe/include/video/renderByPrimitiveType.h" />
+		<Unit filename="../libHampe/include/video/renderToImage.cpp" />
+		<Unit filename="../libHampe/include/video/renderToImage.h" />
+		<Unit filename="src/AudioAnimator3d_App.cpp" />
+		<Unit filename="src/AudioAnimator3d_App.h" />
+		<Unit filename="src/CGUIAudioEqualizer.cpp" />
+		<Unit filename="src/CGUIAudioEqualizer.h" />
+		<Unit filename="src/CGUIAudioPlayer.cpp" />
+		<Unit filename="src/CGUIAudioPlayer.h" />
+		<Unit filename="src/doxygen.cpp" />
+		<Unit filename="src/main_AudioAnimator3d_irr_sfml_fftw3.cpp" />
+		<Unit filename="src/main_draw_audio_spectrum.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/main_guiplot_test.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/resources.h" />
+		<Unit filename="src/resources.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+			<DoxyBlocks>
+				<comment_style block="1" line="1" />
+				<doxyfile_project output_language="German" />
+				<doxyfile_build extract_static="1" />
+				<doxyfile_warnings warn_if_undocumented="1" />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general use_at_in_tags="1" />
+			</DoxyBlocks>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
