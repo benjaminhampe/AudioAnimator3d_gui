@@ -45,9 +45,9 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 : IGUIElement(EGUIET_ELEMENT, environment, parent, id, rectangle)
 , Timer(timer)
 , BackgroundImage(0)
+, TextFont(0)
 , WAV_Gradient(0)
 , FFT_Gradient(0)
-, TextFont(0)
 , PlayPosition(0)
 , FFT_Calculator(0)
 , MasterVolume(0)
@@ -81,9 +81,7 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 	s32 dx = 0;
 	s32 dy = line_height;
 
-	// #ifdef DEBUG
 	printf( "CGUIAudioPlayer::create fft colorgradients()\n" );
-	// #endif // DEBUG
 
 	/// ColorGradient for waveforms
 	WAV_Gradient = new video::CLinearColorGradient();
@@ -165,11 +163,6 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 
 
 	/// Buttons
-
-	// #ifdef DEBUG
-	// printf( "add buttons\n" );
-	// #endif // DEBUG
-
 	dx = 32;
 	dy = dx;
 	y = Border;
@@ -182,7 +175,6 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 	ForwardButton = Environment->addButton( core::recti(x,y,x+dx-1,y+dy-1), this, -1, L">>"); x+=dx;
 	PrevButton = Environment->addButton( core::recti(x,y,x+dx-1,y+dy-1), this, -1, L"<"); x+=dx;
 	NextButton = Environment->addButton( core::recti(x,y,x+dx-1,y+dy-1), this, -1, L">"); x+=dx;
-
 
 	/// Volume
 	//	txt = L"Volume"; txt_size = font->getDimension( txt.c_str() );
@@ -255,7 +247,6 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 	//	ChkLoopMode = Environment->addCheckBox( true, core::recti(x,y,x+dx-1,y+dy-1), this, -1, L"Loop"); y+=dy;
 
 	/// TrackInfo
-	//
 	//	TrackName = Environment->addStaticText( txt.c_str(), core::recti(core::position2di(x,y+ey), txt_size), false, false, this, -1);
 	//  ChannelList = Environment->addComboBox( core::recti(x,y,x+dx-1,y+dy-1), this, -1 ); y+=dy;
 
@@ -272,7 +263,6 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 	//
 	//	if (TrackInfo)
 	//	{
-	////		TrackInfo->setOverrideFont( arial );
 	//		TrackInfo->setOverrideFont( font );
 	//		TrackInfo->setOverrideColor( video::SColor(255,255,255,255) );
 	//	}
@@ -344,7 +334,8 @@ core::stringw CGUIAudioPlayer::createTrackInfo() const
     txt += "- samplecount  = "; txt += sample_count; txt += "\n";
     txt += "- duration     = "; txt += play_duration; txt += "\n";
     txt += "- offset       = "; txt += play_position; txt += "\n";
-    txt += "= status       = "; txt += play_status;
+    txt += "- status       = "; txt += play_status;
+    txt += "- isLooped     = "; txt += isLooped;
 	return txt;
 }
 
@@ -360,14 +351,14 @@ video::ITexture* CGUIAudioPlayer::getBGImage() const
 ///@brief set wallpaper texture to be used by this class for fft-spectrum
 void CGUIAudioPlayer::setBGImage( video::ITexture* tex )
 {
-//	video::IVideoDriver* driver = Environment->getVideoDriver();
-//
-//	if (driver && BackgroundImage)
-//	{
-//		driver->removeTexture( BackgroundImage );
-//	}
-//
-//	BackgroundImage = tex;
+	video::IVideoDriver* driver = Environment->getVideoDriver();
+
+	if (driver && BackgroundImage)
+	{
+		driver->removeTexture( BackgroundImage );
+	}
+
+	BackgroundImage = tex;
 }
 
 ///@brief draw wallpaper texture to Screen0
@@ -443,9 +434,10 @@ video::IImage* CGUIAudioPlayer::createImageFromSoundBufferWaveform( const core::
 	{
 		return 0;
 	}
+
 	#ifdef _DEBUG
-		const u32 img_bpp = video::IImage::getBitsPerPixelFromFormat( img->getColorFormat() );
-		printf("Created image(%d,%d,%d);\n", img_size.Width, img_size.Height, img_bpp );
+	const u32 img_bpp = video::IImage::getBitsPerPixelFromFormat( img->getColorFormat() );
+	printf("Created image(%d,%d,%d);\n", img_size.Width, img_size.Height, img_bpp );
 	#endif // _DEBUG
 
 	//! fill image pixels to fully transparent ( alpha == 0 )
@@ -464,7 +456,6 @@ video::IImage* CGUIAudioPlayer::createImageFromSoundBufferWaveform( const core::
 		y += d;
 	}
 
-
 	return img;
 }
 
@@ -482,8 +473,8 @@ video::IImage* CGUIAudioPlayer::createImageFromSoundBufferPowerSpectrum( const c
 	}
 
 	#ifdef _DEBUG
-		const u32 img_bpp = video::IImage::getBitsPerPixelFromFormat( img->getColorFormat() );
-		printf("Created image(%d,%d,%d);\n", img_size.Width, img_size.Height, img_bpp );
+	const u32 img_bpp = video::IImage::getBitsPerPixelFromFormat( img->getColorFormat() );
+	printf("Created image(%d,%d,%d);\n", img_size.Width, img_size.Height, img_bpp );
 	#endif // _DEBUG
 
 	//! fill image pixels to fully transparent ( alpha == 0 )
@@ -534,6 +525,7 @@ bool CGUIAudioPlayer::loadFile( const core::stringc& filename )
 	const u32 my_sample_count = SoundBuffer.getSampleCount();
 	const u32 my_channel_count = SoundBuffer.getChannelCount();
 	const u32 my_duration = sfx::getDurationFromSoundBufferInMillis( &SoundBuffer );
+
 	u32 my_position = 0;
 	f32 my_volume = 10.0f;		// 10 %
 	f32 my_pitch = 1.0f; 		// normal play-speed
@@ -543,33 +535,34 @@ bool CGUIAudioPlayer::loadFile( const core::stringc& filename )
 	Sound.setVolume( my_volume );
 	Sound.setPitch( my_pitch );
 	Sound.setPlayingOffset( sf::milliseconds( my_position ) );
-	//	s16* my_ptr = 0;
-	//	u32 my_sample_delta = 0;
-	//	f32 my_time_delta = 0.0f;	// in seconds
-//
-//	//! create waveform preview image
-//	//! load fft-power-spectrum background-texture
-//	video::IImage* wavImage = createImageFromSoundBufferWaveform( core::dimension2du(640,480) );
-//	//	video::IImage* fftImage = createImageFromSoundBufferPowerSpectrum( core::dimension2du(2*640,2*480) );
-//
-//	if (!wavImage)	{
-//		printf( "ELL_ERROR - Could not create waveform image\n" );
-//	}
-//
-//	//	if (!fftImage)	{
-//	//		printf( "ELL_ERROR - Could not create fft-powerspectrum image\n" );
-//	//	}
-//
-//	video::ITexture* bgTexture = addTexture( wavImage );
-//
-//	if (!bgTexture)	{
-//		printf( "ELL_ERROR - Could not create bg-texture\n" );
-//	}
-//
-//	this->setBGImage( bgTexture );
-//
-//	if (wavImage)
-//		wavImage->drop();
+
+	s16* my_ptr = 0;
+	u32 my_sample_delta = 0;
+	f32 my_time_delta = 0.0f;	// in seconds
+
+	//! create waveform preview image
+	//! load fft-power-spectrum background-texture
+	video::IImage* wavImage = createImageFromSoundBufferWaveform( core::dimension2du(640,480) );
+	//	video::IImage* fftImage = createImageFromSoundBufferPowerSpectrum( core::dimension2du(2*640,2*480) );
+
+	if (!wavImage)	{
+		printf( "ELL_ERROR - Could not create waveform image\n" );
+	}
+
+	//	if (!fftImage)	{
+	//		printf( "ELL_ERROR - Could not create fft-powerspectrum image\n" );
+	//	}
+
+	video::ITexture* bgTexture = addTexture( wavImage );
+
+	if (!bgTexture)	{
+		printf( "ELL_ERROR - Could not create bg-texture\n" );
+	}
+
+	this->setBGImage( bgTexture );
+
+	if (wavImage)
+		wavImage->drop();
 
 	//	Sound.play();
 	printf( "CGUIAudioPlayer::loadFile() - OK\n" );
@@ -771,118 +764,104 @@ void CGUIAudioPlayer::draw()
 //! called if an event happened.
 bool CGUIAudioPlayer::OnEvent(const SEvent& event)
 {
-////	if (!isEnabled())
-//	return IGUIElement::OnEvent(event);
-//
-//	switch(event.EventType)
-//	{
-//		case EET_KEY_INPUT_EVENT:
+//	if (!isEnabled())
+	return IGUIElement::OnEvent(event);
+
+	switch(event.EventType)
+	{
+	case EET_KEY_INPUT_EVENT:
+	{
+//		if (event.KeyInput.PressedDown &&
+//			(event.KeyInput.Key == KEY_RETURN || event.KeyInput.Key == KEY_SPACE))
 //		{
-////		if (event.KeyInput.PressedDown &&
-////			(event.KeyInput.Key == KEY_RETURN || event.KeyInput.Key == KEY_SPACE))
-////		{
-////			return true;
-////		}
-////
-////		else
-////		if (!event.KeyInput.PressedDown && (event.KeyInput.Key == KEY_RETURN || event.KeyInput.Key == KEY_SPACE))
-////		{
-////			if (Parent)
-////			{
-////				SEvent newEvent;
-////				newEvent.EventType = EET_GUI_EVENT;
-////				newEvent.GUIEvent.Caller = this;
-////				newEvent.GUIEvent.Element = 0;
-////				newEvent.GUIEvent.EventType = EGET_BUTTON_CLICKED;
-////				Parent->OnEvent(newEvent);
-////			}
-////			return true;
-////		}
-//	}
-//		break;
+//			return true;
+//		}
 //
-//	case EET_GUI_EVENT:
-//	{
-//        gui::IGUIElement* caller = event.GUIEvent.Caller;
-//
-////		if ( this->isMyChild(caller) )
-////		{
-//			if ( event.GUIEvent.EventType == EGET_BUTTON_CLICKED )
+//		else
+//		if (!event.KeyInput.PressedDown && (event.KeyInput.Key == KEY_RETURN || event.KeyInput.Key == KEY_SPACE))
+//		{
+//			if (Parent)
 //			{
-//				if (caller == PlayButton)
-//				{
-//					Sound.play();
-////					if (Player)
-////                        Player->play();
-//					return true;
-//				}
-//
-//				else if (caller == PauseButton)
-//				{
-//					Sound.pause();
-////                    if (Player)
-////                        Player->pause();
-//					return true;
-//				}
-//
-//				else if (caller == StopButton)
-//				{
-//					Sound.stop();
-////					if (Player)
-////                        Player->stop();
-//					return true;
-//				}
-//
-////				else if (caller == ButtonResume)
-////				{
-////                    if (Player)
-////                        Player->resume();
-////					return true;
-////				}
-////				else if (caller == ButtonRecord)
-////				{
-////					if (Player)
-////                        Player->record();
-////					return true;
-////				}
-//
-//				else if (caller == RewindButton)
-//				{
-//					Sound.stop();
-//					Sound.setPlayingOffset( sf::milliseconds( 0 ) );
-////					if (Player)
-////                        Player->setPlaySpeed( Player->getPlaySpeed() / 1.5f );
-//					return true;
-//				}
-//
-//				else if (caller == ForwardButton)
-//				{
-//					Sound.stop();
-//					Sound.setPlayingOffset( sf::milliseconds( 0 ) );
-////					if (Player)
-////                        Player->setPlaySpeed( Player->getPlaySpeed() * 1.5f );
-//					return true;
-//				}
-//
-//				else if (caller == PrevButton)
-//				{
-//					Sound.stop();
-//					Sound.setPlayingOffset( sf::milliseconds( 0 ) );
-////					if (Player)
-////                        Player->prev();
-//					return true;
-//				}
-//
-//				else if (caller == NextButton)
-//				{
-//					Sound.stop();
-//					Sound.setPlayingOffset( sf::milliseconds( 0 ) );
-////                    if (Player)
-////                        Player->next();
-//					return true;
-//				}
+//				SEvent newEvent;
+//				newEvent.EventType = EET_GUI_EVENT;
+//				newEvent.GUIEvent.Caller = this;
+//				newEvent.GUIEvent.Element = 0;
+//				newEvent.GUIEvent.EventType = EGET_BUTTON_CLICKED;
+//				Parent->OnEvent(newEvent);
 //			}
-//
+//			return true;
+//		}
+	}
+	break;
+
+	case EET_GUI_EVENT:
+	{
+        gui::IGUIElement* caller = event.GUIEvent.Caller;
+
+		if ( this->isMyChild(caller) )
+		{
+			if ( event.GUIEvent.EventType == EGET_BUTTON_CLICKED )
+			{
+				if (caller == PlayButton)
+				{
+					Sound.play();
+					return true;
+				}
+
+				else if (caller == PauseButton)
+				{
+					Sound.pause();
+					return true;
+				}
+
+				else if (caller == StopButton)
+				{
+					Sound.stop();
+					return true;
+				}
+
+//				else if (caller == ButtonResume)
+//				{
+//                    if (Player)
+//                        Player->resume();
+//					return true;
+//				}
+//				else if (caller == ButtonRecord)
+//				{
+//					if (Player)
+//                        Player->record();
+//					return true;
+//				}
+
+				else if (caller == RewindButton)
+				{
+					Sound.stop();
+					Sound.setPlayingOffset( sf::milliseconds( 0 ) );
+					return true;
+				}
+
+				else if (caller == ForwardButton)
+				{
+					Sound.stop();
+					Sound.setPlayingOffset( sf::milliseconds( 0 ) );
+					return true;
+				}
+
+				else if (caller == PrevButton)
+				{
+					Sound.stop();
+					Sound.setPlayingOffset( sf::milliseconds( 0 ) );
+					return true;
+				}
+
+				else if (caller == NextButton)
+				{
+					Sound.stop();
+					Sound.setPlayingOffset( sf::milliseconds( 0 ) );
+					return true;
+				}
+			}
+
 //			if ( event.GUIEvent.EventType == EGET_SPINBOX_CHANGED )
 //			{
 //				if (caller == MasterVolume)
@@ -943,8 +922,9 @@ bool CGUIAudioPlayer::OnEvent(const SEvent& event)
 ////				{
 ////					return true;
 ////				}
-//			}
-//	} break;
+		}
+	}
+	break;
 //
 //	case EET_MOUSE_INPUT_EVENT:
 ////		if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN)
@@ -968,15 +948,61 @@ bool CGUIAudioPlayer::OnEvent(const SEvent& event)
 ////			return true;
 ////		}
 //		break;
-//	default:
-//		break;
-//	}
+	default:
+		break;
+	}
 
 	//return Parent ? Parent->OnEvent(event) : false;
 	//return Parent ? Parent->OnEvent(event) : IGUIElement::OnEvent(event);
 	return IGUIElement::OnEvent(event);
 }
 
+////! Writes attributes of the element.
+//void CGUIAudioPlayer::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options=0) const
+//{
+//	IGUIElement::serializeAttributes(out,options);
+//
+//	//	out->addBool	("PushButton",		IsPushButton );
+//	//	if (IsPushButton)
+//	//		out->addBool("Pressed",		Pressed);
+//	//
+//	//	out->addTexture ("Image",		Image);
+//	//	out->addRect	("ImageRect",		ImageRect);
+//	//	out->addTexture	("PressedImage",	PressedImage);
+//	//	out->addRect	("PressedImageRect",	PressedImageRect);
+//	//	out->addBool	("UseAlphaChannel",	isAlphaChannelUsed());
+//	//	out->addBool	("Border",		isDrawingBorder());
+//	//	out->addBool	("ScaleImage",		isScalingImage());
+//	//  out->addString  ("OverrideFont",	OverrideFont);
+//}
+//
+////! Reads attributes of the element
+//void CGUIAudioPlayer::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0)
+//{
+//	IGUIElement::deserializeAttributes(in,options);
+//
+//	//	IsPushButton	= in->getAttributeAsBool("PushButton");
+//	//	Pressed		= IsPushButton ? in->getAttributeAsBool("Pressed") : false;
+//	//
+//	//	core::rect<s32> rec = in->getAttributeAsRect("ImageRect");
+//	//	if (rec.isValid())
+//	//		setImage( in->getAttributeAsTexture("Image"), rec);
+//	//	else
+//	//		setImage( in->getAttributeAsTexture("Image") );
+//	//
+//	//	rec = in->getAttributeAsRect("PressedImageRect");
+//	//	if (rec.isValid())
+//	//		setPressedImage( in->getAttributeAsTexture("PressedImage"), rec);
+//	//	else
+//	//		setPressedImage( in->getAttributeAsTexture("PressedImage") );
+//	//
+//	//	setDrawBorder(in->getAttributeAsBool("Border"));
+//	//	setUseAlphaChannel(in->getAttributeAsBool("UseAlphaChannel"));
+//	//	setScaleImage(in->getAttributeAsBool("ScaleImage"));
+//	//  setOverrideFont(in->getAttributeAsString("OverrideFont"));
+//
+//	updateAbsolutePosition();
+//}
 
 
 ////! Sets if the button should use the skin to draw its border
@@ -1003,12 +1029,6 @@ bool CGUIAudioPlayer::OnEvent(const SEvent& event)
 //	_IRR_IMPLEMENT_MANAGED_MARSHALLING_BUGFIX;
 //	return DrawBorder;
 //}
-
-
-
-
-
-
 
 //io::path CGUIAudioPlayer::createPreviewImageFromWaveforms( const core::dimension2du& img_size, bool bVertical ) const
 //{
@@ -1162,57 +1182,8 @@ bool CGUIAudioPlayer::OnEvent(const SEvent& event)
 //}
 //
 
-
-
-////! Writes attributes of the element.
-//void CGUIAudioPlayer::serializeAttributes(io::IAttributes* out, io::SAttributeReadWriteOptions* options=0) const
-//{
-//	IGUIElement::serializeAttributes(out,options);
-//
-//	//	out->addBool	("PushButton",		IsPushButton );
-//	//	if (IsPushButton)
-//	//		out->addBool("Pressed",		Pressed);
-//	//
-//	//	out->addTexture ("Image",		Image);
-//	//	out->addRect	("ImageRect",		ImageRect);
-//	//	out->addTexture	("PressedImage",	PressedImage);
-//	//	out->addRect	("PressedImageRect",	PressedImageRect);
-//	//	out->addBool	("UseAlphaChannel",	isAlphaChannelUsed());
-//	//	out->addBool	("Border",		isDrawingBorder());
-//	//	out->addBool	("ScaleImage",		isScalingImage());
-//	//  out->addString  ("OverrideFont",	OverrideFont);
-//}
-//
-////! Reads attributes of the element
-//void CGUIAudioPlayer::deserializeAttributes(io::IAttributes* in, io::SAttributeReadWriteOptions* options=0)
-//{
-//	IGUIElement::deserializeAttributes(in,options);
-//
-//	//	IsPushButton	= in->getAttributeAsBool("PushButton");
-//	//	Pressed		= IsPushButton ? in->getAttributeAsBool("Pressed") : false;
-//	//
-//	//	core::rect<s32> rec = in->getAttributeAsRect("ImageRect");
-//	//	if (rec.isValid())
-//	//		setImage( in->getAttributeAsTexture("Image"), rec);
-//	//	else
-//	//		setImage( in->getAttributeAsTexture("Image") );
-//	//
-//	//	rec = in->getAttributeAsRect("PressedImageRect");
-//	//	if (rec.isValid())
-//	//		setPressedImage( in->getAttributeAsTexture("PressedImage"), rec);
-//	//	else
-//	//		setPressedImage( in->getAttributeAsTexture("PressedImage") );
-//	//
-//	//	setDrawBorder(in->getAttributeAsBool("Border"));
-//	//	setUseAlphaChannel(in->getAttributeAsBool("UseAlphaChannel"));
-//	//	setScaleImage(in->getAttributeAsBool("ScaleImage"));
-//	//  setOverrideFont(in->getAttributeAsString("OverrideFont"));
-//
-//	updateAbsolutePosition();
-//}
-
-
 } // end namespace gui
+
 } // end namespace irr
 
 // #endif // _IRR_COMPILE_WITH_GUI_

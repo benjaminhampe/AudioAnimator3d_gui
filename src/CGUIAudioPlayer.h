@@ -36,12 +36,12 @@ namespace gui
 
 
 	private:
-		ITimer*						Timer;
+		ITimer*					Timer;
 		video::ITexture*			BackgroundImage;
-		gui::IGUIFont* 				TextFont;	// big font for drawing filename
+		gui::IGUIFont* 			TextFont;	// big font for drawing filename
 
-		video::IColorGradient* 		WAV_Gradient;
-		video::IColorGradient* 		FFT_Gradient;
+		video::IColorGradient* 	WAV_Gradient;
+		video::IColorGradient* 	FFT_Gradient;
 
 		sf::SoundBuffer 			SoundBuffer;
 		sf::Sound 					Sound;
@@ -231,14 +231,14 @@ public:
 
 
 	// SoundBuffer
-	virtual sf::SoundBuffer& getSoundBuffer()
+	virtual sf::SoundBuffer* getSoundBuffer()
 	{
-		return SoundBuffer;
+		return &SoundBuffer;
 	}
 
-	virtual const sf::SoundBuffer& getSoundBuffer() const
+	virtual const sf::SoundBuffer* getSoundBuffer() const
 	{
-		return SoundBuffer;
+		return &SoundBuffer;
 	}
 
 	virtual sf::Sound& getSound()

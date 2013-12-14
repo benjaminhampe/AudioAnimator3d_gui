@@ -87,20 +87,20 @@ private:
 	u32 						myRenderTime;
 //	u32 						myTimeLastWindowTitleUpate;
 //	u32 						myTimeWaitWindowTitleUpate;
-	gui::IGUIFont* 			Font; 				// current used font
-	//gui::IGUIFont* 			DefaultFont;		// GUI Fonts
-	//gui::IGUIFont* 			FontCaption;		// GUI Fonts
-	//gui::IGUIFont* 			FontBig;			// GUI Fonts
-	core::stringw 			WindowTitle;
-	core::position2di 			WindowPosition;
-	core::dimension2du 		WindowDimension;
-	core::dimension2di 		WindowPadding;
-	core::dimension2du 		DesktopSize;
-	core::dimension2du 		ScreenSize;
-	//core::recti 				ScreenRect;
-	video::ITexture* 			Wallpaper; 			// for "loading..." screen
-	video::ITexture* 			SkyDomeTexture;		// SkyDome Texture
-	scene::ISceneNode* 		SkyDome; 			// SkyDome SceneNode
+	gui::IGUIFont* 			myFont; 				// current used font
+	//gui::IGUIFont* 			myDefaultFont;		// GUI Fonts
+	//gui::IGUIFont* 			myFontCaption;		// GUI Fonts
+	//gui::IGUIFont* 			myFontBig;			// GUI Fonts
+	core::stringw 			myWindowTitle;
+	core::position2di 			myWindowPosition;
+	core::dimension2du 		myWindowDimension;
+	core::dimension2di 		myWindowPadding;
+	core::dimension2du 		myDesktopSize;
+	core::dimension2du 		myScreenSize;
+	//core::recti 				myScreenRect;
+	video::ITexture* 			myWallpaper; 			// for "loading..." screen
+	video::ITexture* 			mySkyDomeTexture;		// SkyDome Texture
+	scene::ISceneNode* 		mySkyDome; 			// SkyDome SceneNode
 
 	/// Light SceneNodes
 	//	mySceneMgr->addLightSceneNode( mySceneMgr->getRootSceneNode(), core::vector3df(100,100,100), video::SColorf(1,1,1,1), 400, -1);
@@ -108,8 +108,8 @@ private:
 	//	mySceneMgr->addLightSceneNode( mySceneMgr->getRootSceneNode(), core::vector3df(100,0,0), video::SColorf(0,0,1,1), 200, -1);
 
 	/// SFML Audio 2.0 stuff
-	core::stringc				FileName; 			// current used FileName
-	sf::SoundBuffer& 			sfmlSoundBuffer; 	// SFML Audio 2.0 API stuff
+	core::stringc				myFileName; 			// current used FileName
+	sf::SoundBuffer* 			mySoundBuffer; 	// SFML Audio 2.0 API stuff
 
 	/// FastFourierTransform containers and calculator
 	u32 						myFFTSize;
@@ -118,51 +118,36 @@ private:
 	sfx::FourierTransformRtoC* myFFT;
 
 	/// 2D Matrix data
-	core::dimension2du 		MatrixDimension;
-	core::CMatrix* 			MatrixData;
+	u32 						myMatrixRows;
+	u32 						myMatrixCols;
+	core::CMatrix* 			myMatrixData;
 
 	/// used to display the current FFT DataSet
-	scene::SMeshBuffer* 		DataDisplayBuffer;
+	scene::SMeshBuffer* 		myDataDisplayBuffer;
 
 	/// 3D Matrix SceneNode
-	core::vector3df 			MatrixSize;
-	scene::E_PRIMITIVE_TYPE 	MatrixPrimType;
-	scene::CMatrixSceneNode* 	MatrixNode0;
+	core::vector3df 			myMatrixSize;
+	scene::E_PRIMITIVE_TYPE 	myMatrixPrimType;
+	scene::CMatrixSceneNode* 	myMatrixNode;
 
 	/// GUI AudioPlayer
-	gui::IGUIWindow* 			audioPlayerWindow;
-	gui::CGUIAudioPlayer* 		audioPlayer;
-
-	/// elvman
-	//CRealisticWaterSceneNode* 	WaterNode;
+	gui::IGUIWindow* 			myAudioPlayerWindow;
+	gui::CGUIAudioPlayer* 		myAudioPlayer;
 
 	/// common GUI Elements
 	gui::IGUIButton* 			ToggleButtonHelpWindow;
-
 	gui::IGUIButton* 			ToggleButtonParamWindow;
-
 	gui::IGUIButton* 			ToggleButtonWireframe;
-
 	gui::IGUIButton* 			ToggleButtonLighting;
-
 	gui::IGUIWindow* 			HelpWindow;
-
 	gui::IGUIWindow* 			ParamWindow;
-
 	gui::IGUIComboBox*			InputFFTSize;
-
 	gui::IGUIEditBox*			InputMatrixDimX;
-
 	gui::IGUIEditBox*			InputMatrixDimY;
-
 	gui::IGUIEditBox*			InputMatrixSizeX;
-
 	gui::IGUIEditBox*			InputMatrixSizeY;
-
 	gui::IGUIEditBox*			InputMatrixSizeZ;
-
 	gui::IGUIComboBox*			InputMatrixPrimType;
-
 };
 
 } // end namespace irr

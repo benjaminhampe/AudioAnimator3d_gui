@@ -17,39 +17,38 @@ AudioAnimator3d::AudioAnimator3d( IrrlichtDevice* device )
 , myCamera(0)
 , myGUI(0)
 , mySkin(0)
-, WindowTitle(MY_TITLE)
-, WindowPosition( 10, 100)
-, WindowDimension( 0, 0)
-, WindowPadding( 50, 50)
-, DesktopSize(0,0)
-, ScreenSize(0,0)
-//, ScreenRect(0,0,0,0)
-, Wallpaper(0)
-, SkyDomeTexture(0)
-, SkyDome(0)
-, FileName( MY_AUDIO_FILE )
-, myFFTSize(4*8*128)
-, myFFT(0)
-, MatrixDimension( 4*64, 2*64 )
-, MatrixData(0)
-, DataDisplayBuffer(0)
-, MatrixSize(1024,256,2*1024)
-, MatrixPrimType( scene::EPT_TRIANGLES )
-, MatrixNode0(0)
-//	mySceneMgr->addLightSceneNode( mySceneMgr->getRootSceneNode(), core::vector3df(100,100,100), video::SColorf(1,1,1,1), 400, -1);
-//	mySceneMgr->addLightSceneNode( mySceneMgr->getRootSceneNode(), core::vector3df(0,0,0), video::SColorf(1,1,0,1), 200, -1);
-//	mySceneMgr->addLightSceneNode( mySceneMgr->getRootSceneNode(), core::vector3df(100,0,0), video::SColorf(0,0,1,1), 200, -1);
-, audioPlayerWindow(0)
-, audioPlayer(0)
-//, WaterNode(0)
 , myTime(0)
 , myRenderTime(0)
-//	, myTimeLastWindowTitleUpate(0)
-//	, myTimeWaitWindowTitleUpate(500)
-, Font(0)
-//, DefaultFont(0)
-//, FontCaption(0)
-//, FontBig(0)
+//, myTimeLastWindowTitleUpate(0)
+//, myTimeWaitWindowTitleUpate(500)
+, myFont(0)
+//, myDefaultFont(0)
+//, myFontCaption(0)
+//, myFontBig(0)
+, myWindowTitle(MY_TITLE)
+, myWindowPosition( 10, 100)
+, myWindowDimension( 0, 0)
+, myWindowPadding( 50, 50)
+, myDesktopSize(0,0)
+, myScreenSize(0,0)
+, myWallpaper(0)
+, mySkyDomeTexture(0)
+, mySkyDome(0)
+, myFileName( MY_AUDIO_FILE )
+, myFFTSize(4*8*128)
+, myFFT(0)
+, myMatrixRows( 2*64 )
+, myMatrixCols( 4*64 )
+, myMatrixData(0)
+, myDataDisplayBuffer(0)
+, myMatrixSize(1024,256,2*1024)
+, myMatrixPrimType( scene::EPT_TRIANGLES )
+, myMatrixNode(0)
+, myAudioPlayerWindow(0)
+, myAudioPlayer(0)
+//, myWaterNode(0)
+
+
 , ToggleButtonHelpWindow(0)
 , ToggleButtonParamWindow(0)
 , ToggleButtonWireframe(0)
@@ -75,8 +74,8 @@ AudioAnimator3d::AudioAnimator3d( IrrlichtDevice* device )
 
 AudioAnimator3d::~AudioAnimator3d( )
 {
-	if (MatrixData)
-		MatrixData->drop();
+	if (myMatrixData)
+		myMatrixData->drop();
 }
 
 bool
@@ -103,22 +102,22 @@ AudioAnimator3d::init( )
 
 	myDriver = myDevice->getVideoDriver();
 
-	ScreenSize = myDriver->getScreenSize();
+	myScreenSize = myDriver->getScreenSize();
 
 	mySceneMgr = myDevice->getSceneManager();
 
 
 	myGUI = myDevice->getGUIEnvironment();
 
-	// ScreenRect = myGUI->getRootGUIElement()->getAbsolutePosition();
+	// myScreenRect = myGUI->getRootGUIElement()->getAbsolutePosition();
 
-	Font = myGUI->getFont( MY_BIG_FONT_FILE );
+	myFont = myGUI->getFont( MY_BIG_FONT_FILE );
 
 	mySkin = myGUI->createSkin( gui::EGST_BURNING_SKIN );
 
-	//  if (mySkin && BigFont)
+	//  if (mySkin && myBigFont)
 	//	{
-	//		mySkin->setFont( BigFont );
+	//		mySkin->setFont( myBigFont );
 	//	}
 
 	/// Wallpaper Texture
@@ -127,7 +126,7 @@ AudioAnimator3d::init( )
 
 	myDriver->setTextureCreationFlag( video::ETCF_CREATE_MIP_MAPS, false );
 
-	Wallpaper = myDriver->getTexture( MY_LOAD_SCREEN_IMAGE );
+	myWallpaper = myDriver->getTexture( MY_LOAD_SCREEN_IMAGE );
 
 	myDriver->setTextureCreationFlag( video::ETCF_CREATE_MIP_MAPS, true );
 
@@ -137,51 +136,50 @@ AudioAnimator3d::init( )
 
 	myDriver->beginScene( true, true, video::SColor(255,0,0,0) );
 
-	video::drawLoadingScreen( myDriver, Wallpaper, L"Loading", Font, 0xffffffff );
+	video::drawLoadingScreen( myDriver, myWallpaper, L"Loading", myFont, 0xffffffff );
 
 	myDriver->endScene();
 
-	myDriver->removeTexture( Wallpaper );
+	myDriver->removeTexture( myWallpaper );
 
 	/// create AudioPlayer Window
 
-	audioPlayerWindow = myGUI->addWindow(
+	myAudioPlayerWindow = myGUI->addWindow(
 
-		core::recti( 	WindowPadding.Width,
+		core::recti( 	myWindowPadding.Width,
 
-						3*ScreenSize.Height/4,
+						3*myScreenSize.Height/4,
 
-						ScreenSize.Width-WindowPadding.Width,
+						myScreenSize.Width-myWindowPadding.Width,
 
-						ScreenSize.Height-WindowPadding.Height),
+						myScreenSize.Height-myWindowPadding.Height),
 
 		false, L"GUI AudioPlayer (SFML API)", myGUI->getRootGUIElement(), -1 );
 
 	/// create AudioPlayer inside Window
 
-	audioPlayer = new gui::CGUIAudioPlayer(
+	myAudioPlayer = new gui::CGUIAudioPlayer(
 
 		myFFTSize, myTimer,
 
-		myGUI, audioPlayerWindow, -1, audioPlayerWindow->getClientRect() );
+		myGUI, myAudioPlayerWindow, -1, myAudioPlayerWindow->getClientRect() );
 
 
-	audioPlayer->loadFile( FileName );
+	myAudioPlayer->loadFile( myFileName );
 
-	// audioPlayer->play();
 
 	/// SampleBuffer ( SFML )
 
 	printf( "get SoundBuffer\n" );
 
-	sfmlSoundBuffer = const_cast<sf::SoundBuffer&>(audioPlayer->getSoundBuffer());
+	mySoundBuffer = myAudioPlayer->getSoundBuffer();
 
 
 	/// FastFourierTransform ( fftw3 )
 
 	printf( "get FourierTransform\n" );
 
-	myFFT = audioPlayer->getFourierTransform();
+	myFFT = myAudioPlayer->getFourierTransform();
 
 	printf( "get FourierTransform - OK\n" );
 
@@ -191,9 +189,9 @@ AudioAnimator3d::init( )
 
 	myFFTInput.set_used( myFFTSize );
 
-	myFFTOutput.reallocate( MatrixDimension.Width );
+	myFFTOutput.reallocate( myMatrixCols );
 
-	myFFTOutput.set_used( MatrixDimension.Width );
+	myFFTOutput.set_used( myMatrixCols );
 
 	printf( "fft-size = %d\n", myFFTSize );
 
@@ -217,9 +215,9 @@ AudioAnimator3d::init( )
 
 	if (myCamera)
 	{
-		myCamera->setPosition( core::vector3df(0.5f*MatrixSize.X,2.0f*MatrixSize.Y,-0.25f*MatrixSize.X) );
+		myCamera->setPosition( core::vector3df(0.5f*myMatrixSize.X,2.0f*myMatrixSize.Y,-0.25f*myMatrixSize.X) );
 		// myCamera->setRotation( core::vector3df(0,528,0) );
-		myCamera->setTarget( core::vector3df(0.5f*MatrixSize.X,0.0f,0.25f*MatrixSize.Z) );
+		myCamera->setTarget( core::vector3df(0.5f*myMatrixSize.X,0.0f,0.25f*myMatrixSize.Z) );
 		myCamera->setNearValue( 0.1f );
 		myCamera->setFarValue( 10000.f );
 		myCamera->setFOV( core::PI/2.1f );
@@ -228,15 +226,15 @@ AudioAnimator3d::init( )
 	printf( "create SkyDome\n" );
 
 	/// skydome texture
-	SkyDomeTexture = myDriver->getTexture( MY_SKYDOME_TEXTURE );
+	mySkyDomeTexture = myDriver->getTexture( MY_SKYDOME_TEXTURE );
 
 	/// skydome SceneNode
-	SkyDome = mySceneMgr->addSkyDomeSceneNode( SkyDomeTexture, 32,16,
+	mySkyDome = mySceneMgr->addSkyDomeSceneNode( mySkyDomeTexture, 32,16,
 		0.99f, 2.0f, 1000.0f, mySceneMgr->getRootSceneNode(), -1);
 
-	if (SkyDome)
+	if (mySkyDome)
 	{
-		SkyDome->setRotation( core::vector3df(0,180,0) );
+		mySkyDome->setRotation( core::vector3df(0,180,0) );
 	}
 
 	/// lights
@@ -248,51 +246,54 @@ AudioAnimator3d::init( )
 
 	printf( "create FrontMeshBuffer\n" );
 
-	DataDisplayBuffer = new scene::SMeshBuffer();
-	if (DataDisplayBuffer)
+	myDataDisplayBuffer = new scene::SMeshBuffer();
+	if (myDataDisplayBuffer)
 	{
-		DataDisplayBuffer->Vertices.reallocate( 4*(myFFTOutput.size()-1) );
-		DataDisplayBuffer->Indices.reallocate( 6*(myFFTOutput.size()-1) );
-		DataDisplayBuffer->Vertices.set_used( 0 );
-		DataDisplayBuffer->Indices.set_used( 0 );
-		DataDisplayBuffer->Material.MaterialType = video::EMT_SOLID;
-		DataDisplayBuffer->Material.Lighting = false;
-		DataDisplayBuffer->Material.Wireframe = false;
-		DataDisplayBuffer->Material.FogEnable = false;
+		myDataDisplayBuffer->Vertices.reallocate( 4*(myFFTOutput.size()-1) );
+		myDataDisplayBuffer->Indices.reallocate( 6*(myFFTOutput.size()-1) );
+		myDataDisplayBuffer->Vertices.set_used( 0 );
+		myDataDisplayBuffer->Indices.set_used( 0 );
+		myDataDisplayBuffer->Material.MaterialType = video::EMT_SOLID;
+		myDataDisplayBuffer->Material.Lighting = false;
+		myDataDisplayBuffer->Material.Wireframe = false;
+		myDataDisplayBuffer->Material.FogEnable = false;
 	}
 
 	/// Matrix 2D Array
 
 	printf( "create 2D Matrix\n" );
 
-	MatrixData = new core::CMatrix( MatrixDimension.Height, MatrixDimension.Width );
-	if (MatrixData)
+	myMatrixData = new core::CMatrix( myMatrixRows, myMatrixCols );
+	if (myMatrixData)
 	{
-		MatrixData->fill( 0.0f );
+		myMatrixData->fill( 0.0f );
 	}
 
 	/// Matrix 3D SceneNode
-	video::IColorGradient* colorGradient = audioPlayer->getFFTColorGradient();
+	video::IColorGradient* colorGradient = myAudioPlayer->getFFTColorGradient();
 
 	printf( "create 3D Matrix SceneNode\n" );
 
-	MatrixNode0 = new scene::CMatrixSceneNode(
-		MatrixPrimType,	MatrixSize, colorGradient, MatrixData,
+	myMatrixNode = new scene::CMatrixSceneNode(
+		myMatrixPrimType,
+		myMatrixSize,
+		colorGradient,
+		myMatrixData,
 		mySceneMgr, mySceneMgr->getRootSceneNode(), -1, core::vector3df(0,0,0) );
 
-	if (!MatrixNode0)
+	if (!myMatrixNode)
 	{
 		printf("Could not create CMatrixSceneNode\n");
 	}
 	else
 	{
-		MatrixNode0->setMaterialFlag( video::EMF_LIGHTING, false );
-		// MatrixNode0->setDebugDataVisible( scene::EDS_BBOX );
+		myMatrixNode->setMaterialFlag( video::EMF_LIGHTING, false );
+		// myMatrixNode->setDebugDataVisible( scene::EDS_BBOX );
 	}
 
 
 	/// elvman
-	//WaterNode = new CRealisticWaterSceneNode( mySceneMgr, 2000,2000 );
+	// myWaterNode = new CRealisticWaterSceneNode( mySceneMgr, 2000,2000 );
 
 	//	core::array<s16> samples_for_goertzel;
 	//
@@ -357,93 +358,11 @@ AudioAnimator3d::init( )
 
 	printf( "play()\n" );
 
-	audioPlayer->play();
+	myAudioPlayer->play();
 
 	printf( "AudioAnimator3d::init( ) - OK\n" );
 
 	return true;
-}
-
-gui::IGUIWindow* AudioAnimator3d::createHelpWindow()
-{
-	return 0;
-}
-
-gui::IGUIWindow* AudioAnimator3d::createParamWindow()
-{
-	if (!myDevice)
-		return 0;
-
-	gui::IGUIEnvironment* env = myDevice->getGUIEnvironment();
-
-	if (!env)
-		return 0; // error!
-
-	gui::IGUIWindow* window = env->addWindow(
-		core::recti( 0, 100, 200, 400),
-		false, L"Parameter Control Window", env->getRootGUIElement(), -1 );
-
-	const core::recti r_client = window->getClientRect();
-
-	const s32 w = r_client.getWidth();
-
-	const s32 h = r_client.getHeight();
-
-	const s32 b = 5; // border / padding
-
-	const s32 l = 30; // line-height
-
-	s32 x = b;
-
-	s32 y = b;
-
-	s32 dx = w/2 - 2*b;
-
-	s32 dy = l;
-
-	env->addStaticText( L"FFT-Size",
-		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
-
-	y += dy + b;
-
-	env->addStaticText( L"Matrix Dimension X",
-		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
-
-	y += dy + b;
-
-	env->addStaticText( L"Matrix Dimension Y",
-		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
-
-	y += dy + b;
-
-	env->addStaticText( L"Matrix Size X",
-		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
-
-	y += dy + b;
-
-	env->addStaticText( L"Matrix Size Y",
-		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
-
-	y += dy + b;
-
-	env->addStaticText( L"Matrix Size Z",
-		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
-
-	y += dy + b;
-
-	env->addStaticText( L"Matrix Render Type",
-		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
-
-//	InputFFTSize = env->addComboBox(
-//		core::recti( 0, 0, w, )
-//
-//, InputMatrixDimX(0)
-//, InputMatrixDimY(0)
-//, InputMatrixSizeX(0)
-//, InputMatrixSizeY(0)
-//, InputMatrixSizeZ(0)
-//, InputMatrixPrimType(0)
-	return window;
 }
 
 bool
@@ -456,10 +375,10 @@ AudioAnimator3d::run()
 
 	myTime = myTimer->getRealTime();
 
-	u32 ChannelCount = audioPlayer->getChannelCount();
+	u32 ChannelCount = myAudioPlayer->getChannelCount();
 
 	/// get current PlayPosition
-	u32 PlayPosition = audioPlayer->getPlayPosition();
+	u32 PlayPosition = myAudioPlayer->getPlayPosition();
 
 	/// decrease time to be sync with audio
 	if (PlayPosition > myRenderTime * ChannelCount )
@@ -467,7 +386,7 @@ AudioAnimator3d::run()
 
 	/// myFFT
 
-	sfx::fillSampleBuffer<s16>( myFFTInput, &audioPlayer->getSoundBuffer(), 0, PlayPosition, myFFTInput.size() );
+	sfx::fillSampleBuffer<s16>( myFFTInput, myAudioPlayer->getSoundBuffer(), 0, PlayPosition, myFFTInput.size() );
 	myFFT->setInputData<s16>( myFFTInput );
 	myFFT->fft();
 	myFFT->getPowerSpectrumAsDecibelsThreshold<f32>( myFFTOutput, 45.0f );
@@ -475,18 +394,18 @@ AudioAnimator3d::run()
 	// myFFT.getScaledPowerSpectrum<f32>( myFFTOutput, MatrixSize.Y );
 
 	/// Fill Matrix with new values from myFFT
-	MatrixData->shiftRow();
+	myMatrixData->shiftRow();
 	// MatrixData.shiftRows( 1 );
 
-	const u32 i_max = core::min_<u32>( myFFTOutput.size(), MatrixData->getCols() );
+	const u32 i_max = core::min_<u32>( myFFTOutput.size(), myMatrixData->getCols() );
 
 	for (u32 i=0; i<i_max; i++)
 	{
-		MatrixData->setElement( 0, i, myFFTOutput[i] );
+		myMatrixData->setElement( 0, i, myFFTOutput[i] );
 	}
 
 	/// update Matrix SceneNode Mesh
-	MatrixNode0->createMesh();
+	myMatrixNode->createMesh();
 
 	return true;
 }
@@ -501,20 +420,20 @@ AudioAnimator3d::render()
 	myDriver->setTransform( video::ETS_PROJECTION, myCamera->getProjectionMatrix() );
 
 	sfx::createFilledPath(
-		DataDisplayBuffer,
-		core::dimension2df(MatrixSize.X, MatrixSize.Y),
+		myDataDisplayBuffer,
+		core::dimension2df(myMatrixSize.X, myMatrixSize.Y),
 		myFFTOutput,
-		audioPlayer->getFFTColorGradient(),
+		myAudioPlayer->getFFTColorGradient(),
 		core::vector3df(0,0,0) );
 
-	myDriver->setMaterial( DataDisplayBuffer->getMaterial() );
+	myDriver->setMaterial( myDataDisplayBuffer->getMaterial() );
 
-	video::drawMeshBufferEx( myDriver, DataDisplayBuffer, scene::EPT_TRIANGLES );
+	video::drawMeshBufferEx( myDriver, myDataDisplayBuffer, scene::EPT_TRIANGLES );
 
 	/// draw CoordSystems
-	video::drawXMeter( core::vector3df( 0.0f,0.0f,-1.0f), 0 , core::round32(MatrixSize.X) );
-	video::drawZMeter( core::vector3df( -1.0f,0.0f,0.0f), 0 , core::round32(MatrixSize.Z) );
-	video::drawYMeter( core::vector3df( 0.0f,0.0f,-1.0f), -1, core::round32(MatrixSize.Y) );
+	video::drawXMeter( core::vector3df( 0.0f,0.0f,-1.0f), 0 , core::round32(myMatrixSize.X) );
+	video::drawZMeter( core::vector3df( -1.0f,0.0f,0.0f), 0 , core::round32(myMatrixSize.Z) );
+	video::drawYMeter( core::vector3df( 0.0f,0.0f,-1.0f), -1, core::round32(myMatrixSize.Y) );
 }
 
 bool
@@ -616,6 +535,89 @@ AudioAnimator3d::OnEvent (const SEvent &event)
 	}
 	return false;
 }
+
+//
+//gui::IGUIWindow* AudioAnimator3d::createHelpWindow()
+//{
+//	return 0;
+//}
+//
+//gui::IGUIWindow* AudioAnimator3d::createParamWindow()
+//{
+//	if (!myDevice)
+//		return 0;
+//
+//	gui::IGUIEnvironment* env = myDevice->getGUIEnvironment();
+//
+//	if (!env)
+//		return 0; // error!
+//
+//	gui::IGUIWindow* window = env->addWindow(
+//		core::recti( 0, 100, 200, 400),
+//		false, L"Parameter Control Window", env->getRootGUIElement(), -1 );
+//
+//	const core::recti r_client = window->getClientRect();
+//
+//	const s32 w = r_client.getWidth();
+//
+//	const s32 h = r_client.getHeight();
+//
+//	const s32 b = 5; // border / padding
+//
+//	const s32 l = 30; // line-height
+//
+//	s32 x = b;
+//
+//	s32 y = b;
+//
+//	s32 dx = w/2 - 2*b;
+//
+//	s32 dy = l;
+//
+//	env->addStaticText( L"FFT-Size",
+//		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
+//
+//	y += dy + b;
+//
+//	env->addStaticText( L"Matrix Dimension X",
+//		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
+//
+//	y += dy + b;
+//
+//	env->addStaticText( L"Matrix Dimension Y",
+//		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
+//
+//	y += dy + b;
+//
+//	env->addStaticText( L"Matrix Size X",
+//		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
+//
+//	y += dy + b;
+//
+//	env->addStaticText( L"Matrix Size Y",
+//		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
+//
+//	y += dy + b;
+//
+//	env->addStaticText( L"Matrix Size Z",
+//		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
+//
+//	y += dy + b;
+//
+//	env->addStaticText( L"Matrix Render Type",
+//		core::recti( x, y, x + dx, y + dy), true, false, window, -1, true );
+//
+////	InputFFTSize = env->addComboBox(
+////		core::recti( 0, 0, w, )
+////
+////, InputMatrixDimX(0)
+////, InputMatrixDimY(0)
+////, InputMatrixSizeX(0)
+////, InputMatrixSizeY(0)
+////, InputMatrixSizeZ(0)
+////, InputMatrixPrimType(0)
+//	return window;
+//}
 
 } // end namespace irr
 

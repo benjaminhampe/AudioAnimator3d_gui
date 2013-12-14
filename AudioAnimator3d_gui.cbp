@@ -422,6 +422,8 @@
 		<Unit filename="../libHampe/include/scene/geometry.h" />
 		<Unit filename="../libHampe/include/video/CLinearColorGradient.cpp" />
 		<Unit filename="../libHampe/include/video/CLinearColorGradient.h" />
+		<Unit filename="../libHampe/include/video/CLinearColorGradientTable.cpp" />
+		<Unit filename="../libHampe/include/video/CLinearColorGradientTable.h" />
 		<Unit filename="../libHampe/include/video/ColorConstants.cpp" />
 		<Unit filename="../libHampe/include/video/ColorConstants.h" />
 		<Unit filename="../libHampe/include/video/IColorGradient.cpp" />
