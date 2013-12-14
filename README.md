@@ -9,4 +9,4 @@ The result can be rendered to an image of any size using my module renderToImage
 
 *View the [source of this content](http://github.github.com/github-flavored-markdown/sample_content.html).*
 
-![Alt screenshot](/CGUIPlot.jpg)
+![Alt screenshot](/media/background/load_2.jpg)
