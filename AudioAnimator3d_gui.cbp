@@ -468,6 +468,7 @@
 		<Unit filename="../libHampe/include/video/renderByPrimitiveType.h" />
 		<Unit filename="../libHampe/include/video/renderToImage.cpp" />
 		<Unit filename="../libHampe/include/video/renderToImage.h" />
+		<Unit filename="README.md" />
 		<Unit filename="src/AudioAnimator3d_App.cpp" />
 		<Unit filename="src/AudioAnimator3d_App.h" />
 		<Unit filename="src/CGUIAudioEqualizer.cpp" />
