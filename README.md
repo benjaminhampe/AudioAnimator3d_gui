@@ -1,19 +1,11 @@
 CGUIAudioPlayer FFT
 ================================
-*(c) 2008-2013 by BenjaminHampe@gmx.de
+(c) 2008-2013 by BenjaminHampe@gmx.de
 
+This project aims to be an animated 3d audio-spectrum ( fft-powerspectrum )
+used as screensaver or other display
 
-This project aims to build a plot widget for the irrlicht-engine
-using freetype2 fonts, and OpenGL AntiAliasing and
-other hardware accelerated features like anisotropic filtering
-to improve render-quality.
-
-The result can be rendered to an image
-of any size using my module renderToImage.h/.cpp
-
-*View the [source of this content](http://github.github.com/github-flavored-markdown/sample_content.html).*
-
-*View the [homepage of this hampe.de-projects](http://github.github.com/github-flavored-markdown/sample_content.html).*
+using irrlicht-engine with OpenGL hardware acceleration to improve render-quality.
 
 https://github.com/benjaminhampe/AudioAnimator3d_gui/
 
