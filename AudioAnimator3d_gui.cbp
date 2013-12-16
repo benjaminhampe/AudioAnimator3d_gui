@@ -43,6 +43,7 @@
 					<Add library="freetype250" />
 					<Add library="fftw3" />
 					<Add library="bin\win32\Irrlicht.dll" />
+					<Add library="obj/Win32_gcc_Release_shared/resources.o" />
 				</Linker>
 				<ExtraCommands>
 					<Add before="windres src/resources.rc -O coff -o obj/Win32_gcc_Release_shared/resources.o" />
@@ -85,7 +86,7 @@
 					<Add library="freetype250" />
 					<Add library="fftw3" />
 					<Add library="bin\win32\Irrlicht.dll" />
-					<Add library="obj\Win32_gcc_Debug_shared\resources.o" />
+					<Add library="obj/Win32_gcc_Debug_shared/resources.o" />
 				</Linker>
 				<ExtraCommands>
 					<Add before="windres src/resources.rc -O coff -o obj/Win32_gcc_Debug_shared/resources.o" />
@@ -488,6 +489,8 @@
 		<Unit filename="src/resources.h" />
 		<Unit filename="src/resources.rc">
 			<Option compilerVar="WINDRES" />
+			<Option compile="0" />
+			<Option link="0" />
 		</Unit>
 		<Extensions>
 			<code_completion />

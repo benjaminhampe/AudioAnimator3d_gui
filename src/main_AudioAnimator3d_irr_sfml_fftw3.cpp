@@ -104,6 +104,15 @@ s32 main( s32 argc, c8** argv)
 
 	u32 timeWaitWindowTitleUpate(500);
 
+	/// testing CLinearColorGradientTable
+	video::CLinearColorGradientTable table;
+	table.addColor( video::SColor(0,255,255,255), 0.0f );
+	table.addColor( video::SColor(255,255,255,0), 0.5f );
+	table.addColor( video::SColor(255,255,0,0), 0.8f );
+	table.addColor( video::SColor(255,255,255,255), 1.0f );
+	table.setTableSize( 100 );
+	table.updateTable();
+
 	/// testing CGUIImageViewer
 
 //	gui::IGUIWindow* win0 = env->addWindow(

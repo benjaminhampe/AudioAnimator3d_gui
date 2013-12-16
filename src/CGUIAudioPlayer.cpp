@@ -4,7 +4,7 @@
 
 #include "CGUIAudioPlayer.h"
 
-#include <video/CLinearColorGradient.h>
+#include <video/CLinearColorGradientTable.h>
 
 namespace irr
 {
@@ -50,11 +50,11 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 , FFT_Gradient(0)
 , PlayPosition(0)
 , FFT_Calculator(0)
+//, AudioOutDeviceList(0),
+, PlayButton(0), PauseButton(0), StopButton(0), RewindButton(0), ForwardButton(0), PrevButton(0), NextButton(0)
 , MasterVolume(0)
 , MasterPan(0)
 , MasterPitch(0)
-//, AudioOutDeviceList(0),
-, PlayButton(0), PauseButton(0), StopButton(0), RewindButton(0), ForwardButton(0), PrevButton(0), NextButton(0)
 , FileName("")
 //, TrackList(0), AddTrack(0), DelTrack(0)
 //, TrackChannelList(0), TrackName(0), TrackInfoText(0), TrackPosition(0), TrackDuration(0)
@@ -84,7 +84,7 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 	printf( "CGUIAudioPlayer::create fft colorgradients()\n" );
 
 	/// ColorGradient for waveforms
-	WAV_Gradient = new video::CLinearColorGradient();
+	WAV_Gradient = new video::CLinearColorGradientTable();
 	if (WAV_Gradient)
 	{
 //		WAV_Gradient->addColor( video::SColor(255,255,255,255), 0.0f );
@@ -94,6 +94,9 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 		WAV_Gradient->addColor( video::SColor(255,0,255,0), 0.50f );
 		WAV_Gradient->addColor( video::SColor(255,255,255,0), 0.75f );
 		WAV_Gradient->addColor( video::SColor(255,255,0,0), 1.00f );
+
+		((video::CLinearColorGradientTable*)WAV_Gradient)->setTableSize( 128 );
+		((video::CLinearColorGradientTable*)WAV_Gradient)->updateTable();
 	}
 
 	// #ifdef DEBUG
@@ -101,7 +104,7 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 	// #endif // DEBUG
 
 	/// ColorGradient for waveforms
-	FFT_Gradient = new video::CLinearColorGradient();
+	FFT_Gradient = new video::CLinearColorGradientTable();
 	if (FFT_Gradient)
 	{
 	/// black
@@ -145,6 +148,9 @@ CGUIAudioPlayer::CGUIAudioPlayer(
 //		FFT_Gradient->addColor( video::SColor(255,0,255,0), 0.50f );
 //		FFT_Gradient->addColor( video::SColor(255,255,255,0), 0.75f );
 //		FFT_Gradient->addColor( video::SColor(255,255,0,0), 1.00f );
+
+		((video::CLinearColorGradientTable*)FFT_Gradient)->setTableSize( 1024 );
+		((video::CLinearColorGradientTable*)FFT_Gradient)->updateTable();
 	}
 
 	// #ifdef DEBUG
