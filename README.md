@@ -13,4 +13,6 @@ of any size using my module renderToImage.h/.cpp
 
 *View the [homepage of this hampe.de-projects](http://github.github.com/github-flavored-markdown/sample_content.html).*
 
-![Alt screenshot](https://github.com/benjaminhampe/AudioAnimator3d_gui/media/background/load_2.jpg)
+https://github.com/benjaminhampe/AudioAnimator3d_gui/
+
+![Alt screenshot](media/background/load_2.jpg?raw=true)
